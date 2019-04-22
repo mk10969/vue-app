@@ -5,6 +5,12 @@ export default [
     view: 'Dashboard'
   },
   {
+    path: '/race-table',
+    // Relative to /src/views
+    view: 'RaceTable'
+  },
+  
+  {
     path: '/user-profile',
     name: 'User Profile',
     view: 'UserProfile'
@@ -15,8 +21,8 @@ export default [
     view: 'TableList'
   },
   {
-    path: '/typography',
-    view: 'Typography'
+    path: '/Prefs',
+    view: 'Prefs'
   },
   {
     path: '/icons',

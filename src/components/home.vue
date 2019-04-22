@@ -86,8 +86,11 @@
 
 <script>
 export default {
-  data (){
+  data: function(){
     return {
+      image: 'https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-2.32103624.jpg',
+      // image: 'https://stat.ameba.jp/user_images/20150609/00/masakin0712/21/80/j/o0600090013331720950.jpg?caw=800',
+      color: 'green--text',
       title: null,
       drawer: true,
       mini: false,
@@ -100,6 +103,11 @@ export default {
           text: 'Dashboard'
         },
         {
+          to: '/race-table',
+          icon: 'mdi-clipboard-outline',
+          text: 'Race Table'
+        },
+        {
           to: '/user-profile',
           icon: 'mdi-account',
           text: 'User Profile'
@@ -110,9 +118,9 @@ export default {
           text: 'Table List'
         },
         {
-          to: '/typography',
+          to: '/prefs',
           icon: 'mdi-format-font',
-          text: 'Typography'
+          text: 'Prefs'
         },
         {
           to: '/icons',

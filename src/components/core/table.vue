@@ -16,7 +16,6 @@
       :headers="headers"
       :items="items"
       :search="search"
-      :rows-per-page-items="[10, 50, 100]"
       class=""
     >
       <!-- support -->
@@ -60,7 +59,7 @@
     // },
     created() {
         this.$http
-        .get('http://127.0.0.1:5050/tw/race_ra')
+        .get('http://127.0.0.1:5050/data_record')
         .then(response => {
           console.log(response)
           this.headers = response.data.headers
