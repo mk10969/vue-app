@@ -60,7 +60,7 @@
     // },
     created() {
         this.$http
-        .get('http://127.0.0.1:5050/tw/race_ra')
+        .get('http://127.0.0.1:5050/tw/RACE/RA/')
         .then(response => {
           console.log(response)
           this.headers = response.data.headers

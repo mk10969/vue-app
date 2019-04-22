@@ -1,187 +1,125 @@
 <template>
-    
-  <v-card
-    color="white"
-    flat
-    tile
+  <v-container
+    fill-height
+    fluid
+    grid-list-xl
   >
-  <div class="text-xs-center">
-    <v-btn round color="primary" dark @click="click">df_show</v-btn>
-  </div>
-  <div class="text-xs-center">
-    <v-btn round color="primary" dark @click="click2">df_show_selct</v-btn>
-  </div>
+   <v-layout wrap>
 
-  <!-- 開催日 -->
-  <v-btn-toggle v-model="horse_racing_held" mandatory>
-    <v-btn
-      round
-      v-for="(date, index) in horse_racing_held_list" :key="index"
-      :value="date"
-      @click="click3"
-    >
-      {{ year }} 年{{ date }}
-    </v-btn>
-  </v-btn-toggle>
-
-  <!-- 開催競馬場 -->
-  <v-card-actions class="justify-space-between">
-    <v-spacer></v-spacer>
-    <v-item-group
-      v-model="onboarding"
-      class="text-xs-center"
-      mandatory
-    >
-      <v-item
-        v-for="n in racecourse_code_list"
-        :key="`btn-${n}`"
-      >
-        <v-btn
-          slot-scope="{ active, toggle }"
-          :input-value="active"
-          flat
-          round
-          large
-          @click="toggle"
-        >
-          {{ race_code[n] }}
-        </v-btn>
-      </v-item>
-    </v-item-group>
-    <v-spacer></v-spacer>
-  </v-card-actions>
-
-  <!-- レース番号 -->
-  <v-card-actions class="justify-space-between">
-    <v-btn flat @click="prev">
-      <v-icon>mdi-chevron-left</v-icon>
-    </v-btn>
-    <v-item-group
-      v-model="onboarding"
-      class="text-xs-center"
-      mandatory
-    >
-      <v-item
-        v-for="n in racecourse_code_list"
-        :key="`btn-${n}`"
-      >
-        <v-btn
-          slot-scope="{ active, toggle }"
-          :input-value="active"
-          flat
-          round
-          @click="toggle"
-        >
-          {{ race_code[n] }}
-        </v-btn>
-      </v-item>
-    </v-item-group>
-    <v-btn flat @click="next">
-      <v-icon>mdi-chevron-right</v-icon>
-    </v-btn>
-  </v-card-actions>
-
-
-
-  <v-window v-model="onboarding">
-    <v-window-item
-      v-for="n in racecourse_code_list"
-      :key="`card-${n}`"
-    >
+    <v-flex md14 sm12 lg30>
+    <v-toolbar color="#9ccc65" dark>
+      <v-spacer></v-spacer>
+      <v-toolbar-title>今週のおうまさん</v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-toolbar>
     <v-card>
-      <v-card-title>
-        {{ `card-${n}` }}
-        <v-spacer></v-spacer>
-        <v-text-field
-          v-model="search"
-          append-icon="search"
-          label="Search"
-          single-line
-          hide-details
-        ></v-text-field>
-      </v-card-title>
-    
-        <!-- <v-data-table
-          :headers="headers"
-          :items="items"
-          :search="search"
-          :rows-per-page-items="[20]"
-          class=""
+      <!-- 開催日 -->
+      <v-btn-toggle v-model="date_onboarding" mandatory>
+        <v-btn
+          v-for="date in dates" :key="`btn-${date}`"
+          :value="date"
+          flat
+          @click="click2()"
         >
-          <template v-slot:no-data>
-            <v-alert :value="true" color="error" icon="warning">
-              Sorry, nothing to display here :(
-            </v-alert>
-          </template>
-
-          <template slot="items" slot-scope="props">
-            <tr>
-              <td v-for="(column, index) in headers" :key="index">
-                {{ props.item[column.value] }}
-              </td>
-            </tr>
-          </template>
-        </v-data-table> -->
+          {{ get_racing_date(year, date) }}
+        </v-btn>
+      </v-btn-toggle>
     </v-card>
-    </v-window-item>
-  </v-window>
-  </v-card>
+    </v-flex>
+
+    <v-flex md14 sm12 lg4 v-for="cource in cource_list" :key="`btn-${cource}`">
+      <!-- 開催競馬場 -->
+      <v-card>
+        {{ get_race_name(cource) }}
+      </v-card>
+
+      <!-- レース番号 -->
+      <once :racing_data="get_racing_data(cource)"></once>
+
+      <v-card>
+        {{ race_code[cource] }}
+      </v-card>
+    </v-flex>
+   </v-layout>
+  </v-container>
 </template>
 
 <script>
-  import DataFrame from "dataframe-js";
-  
+  import DataFrame from 'dataframe-js';
+  import moment from 'moment';
+  import once from './once.vue'
+
   export default {
+    components: {
+      once
+    },
     data: () => ({
       // 下記は、一旦。
       race_code: {
         "01": "札幌", "02": "函館", "03": "福島", "04": "新潟", "05": "東京", "06": "中山", "07": "中京", "08": "京都", "09": "阪神", "10": "小倉"
       },
-      search: "",
-      onboarding: 0,
+      data_code: {
+        "1": "土", "2": "日", "3": "祝日", "4": "月", "5": "火", "6": "水", "7": "木", "8": "金"
+      },
+
+      date_onboarding: null,
+      
       df: null,
       year: null,
-      horse_racing_held: null,
-      horse_racing_held_list: null,
-      racecourse_code_list: null,
-
-      
-
+      dates: null,
+      cource_list: null,
     }),
+
+    // watch: {
+    //   data: {
+    //     handler (newVal, oldVal) {
+    //       console.log(`更新前のネストされたデータ：${oldVal.nestedData}`)
+    //       console.log(`更新後のネストされたデータ：${newVal.nestedData}`)
+    //     },
+    //     deep: true
+    //     }
+    // },
+
     created() {
         this.$http
-        .get('http://127.0.0.1:5050/tw/race_ra')
+        .get('http://127.0.0.1:5050/tw/RACE/RA/')
         .then(response => {
           console.log(response)
           this.df = new DataFrame(response.data.items, response.data.header)
           
-          this.year = this.df.unique("開催年").toArray("開催年")
-          this.horse_racing_held_list = this.df.unique("開催月日").toArray("開催月日")
-          this.racecourse_code_list = this.df.unique("競馬場コード").toArray("競馬場コード")
-          this.horse_racing_held = this.horse_racing_held_list[0]
+          this.year = this.df.unique("開催年").toArray("開催年").toString()
+          this.dates = this.df.unique("開催月日").toArray("開催月日")
+          this.cource_list = this.df.unique("競馬場コード").toArray("競馬場コード")
         })
     },
     methods: {
       next () {
-        this.onboarding = this.onboarding + 1 === this.racecourse_code_list
+        this.onboarding = this.onboarding + 1 === this.cource_list
           ? 0
           : this.onboarding + 1
       },
       prev () {
         this.onboarding = this.onboarding - 1 < 0
-          ? this.racecourse_code_list - 1
+          ? this.cource_list - 1
           : this.onboarding - 1
+      },
+      get_racing_date(year, date){
+        return moment(year + date, "YYYYMMDD").format('YYYY年MM月DD日')
+      },
+      get_race_name(number){
+        return this.race_code[number]
+      },
+      get_racing_data(cource){
+        return {
+          "racing_date": this.date_onboarding,
+          "cource": cource
+        }
       },
       click () {
         console.log(this.df)
       },
       click2 () {
-        console.log()
-        console.log(this.horse_racing_held_list),
-        console.log(this.racecourse_code_list)
-      },
-      click3() {
-        console.log(this.horse_racing_held)
+        console.log(this.date_onboarding)
       },
     }
   }
