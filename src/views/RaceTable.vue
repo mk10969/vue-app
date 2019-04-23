@@ -12,32 +12,59 @@
       <v-toolbar-title>今週のおうまさん</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
-    <v-card>
-      <!-- 開催日 -->
-      <v-btn-toggle v-model="date_onboarding" mandatory>
+    </v-flex>
+
+    <v-flex md14 sm12 lg30>
+      <v-card>
+        <!-- 開催日 -->
+        <v-btn-toggle v-model="date_onboarding" mandatory>
+          <v-btn
+            v-for="date in dates" :key="`btn-${date}`"
+            :value="date"
+            flat
+            @click="click2()"
+          >
+            {{ get_racing_date(year, date) }}
+          </v-btn>
+        </v-btn-toggle>
+      </v-card>
+      <!-- 開催競馬場 -->
+      <!-- <v-card>
+      <v-btn-toggle v-model="cource_onboarding" mandatory>
         <v-btn
-          v-for="date in dates" :key="`btn-${date}`"
-          :value="date"
+          v-for="cource in cource_list" :key="`btn-${cource}`"
+          :value="cource"
           flat
           @click="click2()"
         >
-          {{ get_racing_date(year, date) }}
+          {{ get_race_name(cource) }}
         </v-btn>
       </v-btn-toggle>
-    </v-card>
-    </v-flex>
-
-    <v-flex md14 sm12 lg4 v-for="cource in cource_list" :key="`btn-${cource}`">
-      <!-- 開催競馬場 -->
+      </v-card> -->
       <v-card>
-        {{ get_race_name(cource) }}
+    1<v-tabs 
+      fixed-tabs
+      v-model="cource_onboarding"
+      color="cyan"
+      dark
+      slider-color="yellow"
+    >
+        <v-tab
+          v-for="i in cource_list"
+          :key="i"
+          :href="'#tab-' + i"
+          @click="click2()"
+        >
+          {{ i }}
+        </v-tab>
+        </v-tabs>
       </v-card>
 
       <!-- レース番号 -->
-      <once :racing_data="get_racing_data(cource)"></once>
+      <once :racing_data="get_racing_data()"></once>
 
       <v-card>
-        {{ race_code[cource] }}
+        {{ race_code }}
       </v-card>
     </v-flex>
    </v-layout>
@@ -63,7 +90,8 @@
       },
 
       date_onboarding: null,
-      
+      cource_onboarding: null,
+
       df: null,
       year: null,
       dates: null,
@@ -109,10 +137,10 @@
       get_race_name(number){
         return this.race_code[number]
       },
-      get_racing_data(cource){
+      get_racing_data(){
         return {
           "racing_date": this.date_onboarding,
-          "cource": cource
+          "cource": this.cource_onboarding,
         }
       },
       click () {
@@ -120,6 +148,8 @@
       },
       click2 () {
         console.log(this.date_onboarding)
+        console.log(this.cource_onboarding)
+        
       },
     }
   }

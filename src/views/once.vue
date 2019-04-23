@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     click() {
-      console.log(this.racing_data, this.race_onboarding)
+      console.log(this.racing_data, this.race_onboarding + "R")
     }
   }
 }
