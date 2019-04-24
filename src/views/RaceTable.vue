@@ -9,62 +9,52 @@
     <v-flex md14 sm12 lg30>
     <v-toolbar color="#9ccc65" dark>
       <v-spacer></v-spacer>
-      <v-toolbar-title>今週のおうまさん</v-toolbar-title>
+      <v-toolbar-title>aaaaa</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
     </v-flex>
 
     <v-flex md14 sm12 lg30>
+      <!-- 開催日 -->
       <v-card>
-        <!-- 開催日 -->
-        <v-btn-toggle v-model="date_onboarding" mandatory>
-          <v-btn
-            v-for="date in dates" :key="`btn-${date}`"
-            :value="date"
-            flat
+
+      <v-tabs 
+        grow
+        v-model="date_onboarding"
+        slider-color="black"
+      >
+          <v-tab
+            v-for="date in dates"
+            :key="date"
+            :href="'#tab-' + date"
             @click="click2()"
           >
-            {{ get_racing_date(year, date) }}
-          </v-btn>
-        </v-btn-toggle>
-      </v-card>
+            {{ date }}
+          </v-tab>
+      </v-tabs>
+
       <!-- 開催競馬場 -->
-      <!-- <v-card>
-      <v-btn-toggle v-model="cource_onboarding" mandatory>
-        <v-btn
-          v-for="cource in cource_list" :key="`btn-${cource}`"
-          :value="cource"
-          flat
-          @click="click2()"
-        >
-          {{ get_race_name(cource) }}
-        </v-btn>
-      </v-btn-toggle>
-      </v-card> -->
-      <v-card>
-    1<v-tabs 
-      fixed-tabs
-      v-model="cource_onboarding"
-      color="cyan"
-      dark
-      slider-color="yellow"
-    >
-        <v-tab
-          v-for="i in cource_list"
-          :key="i"
-          :href="'#tab-' + i"
-          @click="click2()"
-        >
-          {{ i }}
-        </v-tab>
-        </v-tabs>
+      <v-tabs 
+        grow
+        v-model="cource_onboarding"
+        slider-color="black"
+      >
+          <v-tab
+            v-for="i in cource_list"
+            :key="i"
+            :href="'#tab-' + i"
+            @click="click2()"
+          >
+            {{ get_race_name(i) }}
+          </v-tab>
+      </v-tabs>
       </v-card>
 
       <!-- レース番号 -->
       <once :racing_data="get_racing_data()"></once>
 
       <v-card>
-        {{ race_code }}
+        aaaaaaaa
       </v-card>
     </v-flex>
    </v-layout>
@@ -110,7 +100,7 @@
 
     created() {
         this.$http
-        .get('http://127.0.0.1:5050/tw/RACE/RA/')
+        .get('http://127.0.0.1:5000/tw/RACE/RA/')
         .then(response => {
           console.log(response)
           this.df = new DataFrame(response.data.items, response.data.header)
