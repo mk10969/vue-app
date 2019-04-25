@@ -1,5 +1,12 @@
 <template>
     <!-- <div>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div> -->
+    <v-card>
+    <v-btn
+      @click="click()"
+    >
+    ここや
+    </v-btn>
+
     <v-data-table
         :headers="headers"
         :items="items"
@@ -21,21 +28,26 @@
             </tr>
         </template>
     </v-data-table>
+    </v-card>
 </template>
 
 <script>
-  export default {
-    props: {
-      horses_data: Object,
-    },
-    data: () => ({
-      length: 3,
-      window: 0
-    }),
-    methods: {
-        click() {
-            console.log(this.horses_data)
-        }
-    },
-  }
+export default {
+  props: {
+    horse_data: Object,
+  },
+  data: () => ({
+    df: null,
+    search: '',
+    headers: null,
+    items: null
+  
+  }),
+
+  methods: {
+      click() {
+          console.log(this.horse_data)
+      }
+  },
+}
 </script>
