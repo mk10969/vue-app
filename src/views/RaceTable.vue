@@ -1,9 +1,5 @@
 <template>
-  <v-container
-    fill-height
-    fluid
-    grid-list-xl
-  >
+  <v-container fill-height fluid grid-list-xl>
    <v-layout wrap>
     <v-flex md14 sm12 lg30>
     <v-toolbar color="#9ccc65" dark>
@@ -16,11 +12,7 @@
     <v-flex md14 sm12 lg30>
       <!-- 開催日 -->
       <v-card>
-      <v-tabs 
-        grow
-        v-model="race_held_onboarding"
-        slider-color="black"
-      >
+        <v-tabs grow v-model="race_held_onboarding" slider-color="black">
           <v-tab
             v-for="date in dates"
             :key="date"
@@ -29,16 +21,12 @@
           >
             {{ get_racing_held(year, date) }}
           </v-tab>
-      </v-tabs>
+        </v-tabs>
       </v-card>
       
       <!-- 開催競馬場 -->
       <v-card>
-      <v-tabs 
-        grow
-        v-model="race_cource_onboarding"
-        slider-color="black"
-      >
+        <v-tabs grow v-model="race_cource_onboarding" slider-color="black">
           <v-tab
             v-for="i in cource_list"
             :key="i"
@@ -47,45 +35,47 @@
           >
             {{ get_race_name(i) }}
           </v-tab>
-      </v-tabs>
+        </v-tabs>
       </v-card>
 
       <!-- レーズ番号 -->
       <v-card >
         <v-item-group v-model="race_number_onboarding" mandatory>
           <v-item v-for="n in 12" :key="`btn-${n}`">
+
+
             <v-btn
+              flat round large
               slot-scope="{ active, toggle }"
               :input-value="active"
-              flat
-              round
-              large
               @click="toggle()"
             >
               {{ n }}R
             </v-btn>
+
+
+
           </v-item>
         </v-item-group>
-
-        <v-window v-model="race_number_onboarding">
-          <v-window-item 
-            v-for="n in 12"
-            :key="`card-${n}`"
-          >
-            <v-card>
-              <v-card-title>
-                {{ `card-${n}` }}
-              </v-card-title>
-                <!-- 出走馬一覧 -->
-                <!-- レース番号は、表示は、1~12だが、裏の値（race_number_onboarding）は、0~11 -->
-                <!-- <HorseTable :horse_data="horse_data()"></HorseTable> -->
-                <!-- <HorseTable ></HorseTable> -->
-                
-            </v-card>
-          </v-window-item>
-        </v-window>
       </v-card>
 
+      <!-- 出走馬一覧 -->
+      <v-window v-model="race_number_onboarding">
+        <v-window-item 
+          v-for="n in 12"
+          :key="`card-${n}`"
+        >
+          <v-card>
+            <v-card-title>
+              {{ `card-${n}` }}
+            </v-card-title>
+          </v-card>
+          <!-- <HorseTable :horse_data="horse_data()"></HorseTable> -->
+          <!-- <HorseTable ></HorseTable>     -->
+
+        </v-window-item>
+      </v-window>
+      
       <v-card>
         aaaaaaaa
       </v-card>
@@ -97,15 +87,12 @@
 <script>
 import DataFrame from 'dataframe-js';
 import moment from 'moment';
-// import RaceCarousel from './RaceCarousel.vue'
 import HorseTable from './HorseTable.vue'
 
-
-moment.locales('ja', {
+moment.updateLocale('ja', {
     weekdays: ["日曜日","月曜日","火曜日","水曜日","木曜日","金曜日","土曜日"],
     weekdaysShort: ["日","月","火","水","木","金","土"],
 });
-
 
 export default {
   components: {
@@ -127,21 +114,10 @@ export default {
     
     year: null,
     dates: null,
-
     cource_list: null,
   }),
 
-  // watch: {
-  //   data: {
-  //     handler (newVal, oldVal) {
-  //       console.log(`更新前のネストされたデータ：${oldVal.nestedData}`)
-  //       console.log(`更新後のネストされたデータ：${newVal.nestedData}`)
-  //     },
-  //     deep: true
-  //     }
-  // },
-
-  async created() {
+  async mounted() {
       let res_RA = await this.$http.get('http://127.0.0.1:5000/tw/RACE/RA/')
       this.df_ra = new DataFrame(res_RA.data.items, res_RA.data.header)
       this.year = this.df_ra.unique("開催年").toArray("開催年").toString()
@@ -149,10 +125,10 @@ export default {
       this.cource_list = this.df_ra.unique("競馬場コード").toArray("競馬場コード")
       console.log(res_RA)
       console.log("res_RA完了")
-      // let res_SE = await this.$http.get('http://127.0.0.1:5000/tw/RACE/SE/')
-      // this.df_se = new DataFrame(res_SE.data.items, res_SE.data.header)
+      let res_SE = await this.$http.get('http://127.0.0.1:5000/tw/RACE/SE/')
+      this.df_se = new DataFrame(res_SE.data.items, res_SE.data.header)
 
-      // console.log(res_SE)
+      console.log(res_SE)
       console.log("res_SE完了")
   },
 
