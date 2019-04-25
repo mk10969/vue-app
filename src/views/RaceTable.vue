@@ -17,7 +17,6 @@
     <v-flex md14 sm12 lg30>
       <!-- 開催日 -->
       <v-card>
-
       <v-tabs 
         grow
         v-model="date_onboarding"
@@ -52,7 +51,6 @@
 
       <!-- レース番号 -->
       <once :racing_data="get_racing_data()"></once>
-
       <v-card>
         aaaaaaaa
       </v-card>
@@ -66,6 +64,8 @@
   import moment from 'moment';
   import once from './once.vue'
 
+  // import window from './test_window.vue'
+  
   export default {
     components: {
       once
@@ -109,6 +109,8 @@
           this.dates = this.df.unique("開催月日").toArray("開催月日")
           this.cource_list = this.df.unique("競馬場コード").toArray("競馬場コード")
         })
+
+        
     },
     methods: {
       next () {
