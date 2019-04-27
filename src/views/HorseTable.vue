@@ -7,7 +7,7 @@
     ここや
     </v-btn>
 
-    <v-data-table
+    <!-- <v-data-table
         :headers="headers"
         :items="items"
         :search="search"
@@ -27,7 +27,7 @@
             </td>
             </tr>
         </template>
-    </v-data-table>
+    </v-data-table> -->
     </v-card>
 </template>
 
@@ -43,6 +43,10 @@ export default {
     items: null
   
   }),
+  // mounted() {
+  //   this.headers = this.horse_data.listColumns()
+  //   this.items = this.horse_data.toDict()
+  // },
 
   methods: {
       click() {
