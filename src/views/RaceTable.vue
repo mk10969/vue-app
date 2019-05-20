@@ -17,7 +17,6 @@
             v-for="date in dates"
             :key="date"
             :href="'#' + date"
-            @click="show_horse_table()"
           >
             {{ get_racing_held(year, date) }}
           </v-tab>
@@ -29,7 +28,6 @@
             v-for="(i, index) in race_cource_list"
             :key="index"
             :href="'#' + i[1]"
-            @click="show_horse_table()"
           >
             {{ get_race_name(i[1]) }}
           </v-tab>
